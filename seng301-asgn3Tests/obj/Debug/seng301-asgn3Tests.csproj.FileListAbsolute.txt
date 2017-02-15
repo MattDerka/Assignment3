@@ -1,0 +1,8 @@
+C:\Users\matthew.kanderka\Source\Repos\seng301-asgn3.vstudio\seng301-asgn3.vstudio\seng301-asgn3Tests\bin\Debug\seng301-asgn3Tests.dll
+C:\Users\matthew.kanderka\Source\Repos\seng301-asgn3.vstudio\seng301-asgn3.vstudio\seng301-asgn3Tests\bin\Debug\seng301-asgn3Tests.pdb
+C:\Users\matthew.kanderka\Source\Repos\seng301-asgn3.vstudio\seng301-asgn3.vstudio\seng301-asgn3Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\matthew.kanderka\Source\Repos\seng301-asgn3.vstudio\seng301-asgn3.vstudio\seng301-asgn3Tests\bin\Debug\seng301-asgn2.dll
+C:\Users\matthew.kanderka\Source\Repos\seng301-asgn3.vstudio\seng301-asgn3.vstudio\seng301-asgn3Tests\bin\Debug\seng301-asgn2.pdb
+C:\Users\matthew.kanderka\Source\Repos\seng301-asgn3.vstudio\seng301-asgn3.vstudio\seng301-asgn3Tests\obj\Debug\seng301-asgn3Tests.csprojResolveAssemblyReference.cache
+C:\Users\matthew.kanderka\Source\Repos\seng301-asgn3.vstudio\seng301-asgn3.vstudio\seng301-asgn3Tests\obj\Debug\seng301-asgn3Tests.dll
+C:\Users\matthew.kanderka\Source\Repos\seng301-asgn3.vstudio\seng301-asgn3.vstudio\seng301-asgn3Tests\obj\Debug\seng301-asgn3Tests.pdb
