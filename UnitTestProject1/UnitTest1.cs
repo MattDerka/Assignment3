@@ -18,10 +18,8 @@ namespace UnitTestProject1
             int popRackCapacity = 10;
             int receptacleCapacity = 10;
 
-            int a = 0;
-
-            VendingMachine d = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
-            VendingMachineLogic l = new VendingMachineLogic(d);
+            VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+            VendingMachineLogic l = new VendingMachineLogic(vm);
 
             List<string> popNames = new List<string>();
             popNames.Add("Coke");
@@ -33,7 +31,10 @@ namespace UnitTestProject1
             popCosts.Add(250);
             popCosts.Add(205);
 
-            d.Configure(popNames, popCosts);
+            vm.Configure(popNames, popCosts);
+
+            int[] nickles = {1, 0};
+            vm.LoadCoins(nickles);
         }
     }
 }
