@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Frontend2.Hardware;
+using Frontend2;
 using System.Collections.Generic;
 
 namespace UnitTestProject1
@@ -33,8 +34,37 @@ namespace UnitTestProject1
 
             vm.Configure(popNames, popCosts);
 
-            int[] nickles = {1, 0};
-            vm.LoadCoins(nickles);
+            Coin five = new Coin(5);
+            Coin ten = new Coin(10);
+            Coin twentyFive = new Coin(25);
+            Coin hundred = new Coin(100);
+
+            List<Coin> fiveCoins = new List<Coin>();
+            fiveCoins.Add(five);
+
+            List<Coin> tenCoins = new List<Coin>();
+            tenCoins.Add(ten);
+
+            List<Coin> twentyFiveCoins = new List<Coin>();
+            twentyFiveCoins.Add(twentyFive);
+
+            var rack = vm.CoinRacks;
+            rack[0].LoadCoins(fiveCoins);
+            rack[1].LoadCoins(tenCoins);
+            rack[2].LoadCoins(twentyFiveCoins);
+
+            PopCan coke = new PopCan("Coke");
+            PopCan water = new PopCan("water");
+            PopCan stuff = new PopCan("stuff");
+
+            List<PopCan> cokes = new List<PopCan>();
+            cokes.Add(coke);
+
+            List<PopCan> waters = new List<PopCan>();
+            waters.Add(water);
+
+            List<PopCan> stuffs = new List<PopCan>();
+            stuffs.Add(stuff);
         }
     }
 }
