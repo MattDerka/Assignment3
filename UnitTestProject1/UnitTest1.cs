@@ -94,5 +94,45 @@ using Frontend2.Hardware;
             storedContents.PopCansInPopCanRacks.Add(popCanRacks.Unload());
         }
 
+        VendingMachineStoredContents expected = new VendingMachineStoredContents();
+
+        List<Coin> expectedFive = new List<Coin>();
+        expectedFive.Add(five);
+
+        List<Coin> expectedTen = new List<Coin>();
+        expectedTen.Add(ten);
+
+        List<Coin> expected25 = new List<Coin>();
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+
+        List<Coin> expected100 = new List<Coin>();
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+
+
+        expected.CoinsInCoinRacks.Add(expectedFive);
+        expected.CoinsInCoinRacks.Add(expectedTen);
+        expected.CoinsInCoinRacks.Add(expected25);
+        expected.CoinsInCoinRacks.Add(expected100);
+
+        List<PopCan> expectedCoke = new List<PopCan>();
+
+        List<PopCan> expectedWater = new List<PopCan>();
+        expectedWater.Add(water);
+
+        List<PopCan> expectedStuff = new List<PopCan>();
+        expectedStuff.Add(stuff);
+
+        expected.PopCansInPopCanRacks.Add(expectedCoke);
+        expected.PopCansInPopCanRacks.Add(expectedWater);
+        expected.PopCansInPopCanRacks.Add(expectedStuff);
+
+
+        Assert.AreEqual(expected,storedContents);
+        
         }
+
     }
