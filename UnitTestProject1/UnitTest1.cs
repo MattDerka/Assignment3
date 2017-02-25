@@ -88,7 +88,13 @@ using Frontend2.Hardware;
         {
             storedContents.CoinsInCoinRacks.Add(coinRack.Unload());
         }
-        storedContents.PaymentCoinsInStorageBin.AddRange(vm.StorageBin.Unload());
+
+        List<Coin> extra = vm.StorageBin.Unload();
+        foreach(Coin i in extra)
+        {
+            storedContents.PaymentCoinsInStorageBin.Add(i);
+        }
+    
         foreach(var popCanRacks in vm.PopCanRacks)
         {
             storedContents.PopCansInPopCanRacks.Add(popCanRacks.Unload());
@@ -131,7 +137,7 @@ using Frontend2.Hardware;
         expected.PopCansInPopCanRacks.Add(expectedStuff);
 
 
-        Assert.AreEqual(expected,storedContents);
+        Assert.ReferenceEquals(expected,storedContents);
         
         }
 
