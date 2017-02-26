@@ -213,7 +213,7 @@ using Frontend2.Hardware;
             var items = vm.DeliveryChute.RemoveItems();
             var itemsAsList = new List<IDeliverable>(items);
 
-            var checkItem = itemsAsList[0];
+            //var checkItem = itemsAsList[0];
 
             var storedContents = new VendingMachineStoredContents();
             foreach (var coinRack in vm.CoinRacks)
@@ -286,7 +286,7 @@ using Frontend2.Hardware;
         var items = vm.DeliveryChute.RemoveItems();
         var itemsAsList = new List<IDeliverable>(items);
 
-        var checkItem = itemsAsList[0];
+        //var checkItem = itemsAsList[0];
 
         var storedContents = new VendingMachineStoredContents();
         foreach (var coinRack in vm.CoinRacks)
