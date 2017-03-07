@@ -81,7 +81,10 @@ public class UnitTest1
         var items = vm.DeliveryChute.RemoveItems();
         var itemsAsList = new List<IDeliverable>(items);
 
-        var checkItem = itemsAsList[0];
+        var checkItems = new List<IDeliverable>();
+        checkItems.Add(coke);
+
+        CollectionAssert.AreEqual(itemsAsList, checkItems);
 
         var storedContents = new VendingMachineStoredContents();
         foreach (var coinRack in vm.CoinRacks)
@@ -136,8 +139,18 @@ public class UnitTest1
         expected.PopCansInPopCanRacks.Add(expectedWater);
         expected.PopCansInPopCanRacks.Add(expectedStuff);
 
+        List<Coin> expectedPCISB = new List<Coin>();
 
-        Assert.ReferenceEquals(expected, storedContents);
+
+        CollectionAssert.AreEqual(expectedFive, storedContents.CoinsInCoinRacks[0]);
+        CollectionAssert.AreEqual(expectedTen, storedContents.CoinsInCoinRacks[1]);
+        CollectionAssert.AreEqual(expected25, storedContents.CoinsInCoinRacks[2]);
+        CollectionAssert.AreEqual(expected100, storedContents.CoinsInCoinRacks[3]);
+
+        CollectionAssert.AreEqual(expectedCoke, storedContents.PopCansInPopCanRacks[0]);
+        CollectionAssert.AreEqual(expectedWater, storedContents.PopCansInPopCanRacks[1]);
+        CollectionAssert.AreEqual(expectedStuff, storedContents.PopCansInPopCanRacks[2]);
+        CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
 
     }
 
@@ -213,7 +226,13 @@ public class UnitTest1
         var items = vm.DeliveryChute.RemoveItems();
         var itemsAsList = new List<IDeliverable>(items);
 
-        //var checkItem = itemsAsList[0];
+        var checkItems = new List<IDeliverable>();
+        checkItems.Add(coke);
+        checkItems.Add(twentyFive);
+        checkItems.Add(twentyFive);
+
+
+        CollectionAssert.AreEqual(itemsAsList, checkItems);
 
         var storedContents = new VendingMachineStoredContents();
         foreach (var coinRack in vm.CoinRacks)
@@ -265,8 +284,17 @@ public class UnitTest1
         expected.PopCansInPopCanRacks.Add(expectedWater);
         expected.PopCansInPopCanRacks.Add(expectedStuff);
 
+        List<Coin> expectedPCISB = new List<Coin>();
 
-        Assert.ReferenceEquals(expected, storedContents);
+        CollectionAssert.AreEqual(expectedFive, storedContents.CoinsInCoinRacks[0]);
+        CollectionAssert.AreEqual(expectedTen, storedContents.CoinsInCoinRacks[1]);
+        CollectionAssert.AreEqual(expected25, storedContents.CoinsInCoinRacks[2]);
+        CollectionAssert.AreEqual(expected100, storedContents.CoinsInCoinRacks[3]);
+
+        CollectionAssert.AreEqual(expectedCoke, storedContents.PopCansInPopCanRacks[0]);
+        CollectionAssert.AreEqual(expectedWater, storedContents.PopCansInPopCanRacks[1]);
+        CollectionAssert.AreEqual(expectedStuff, storedContents.PopCansInPopCanRacks[2]);
+        CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
 
     }
 
@@ -286,7 +314,9 @@ public class UnitTest1
         var items = vm.DeliveryChute.RemoveItems();
         var itemsAsList = new List<IDeliverable>(items);
 
-        //var checkItem = itemsAsList[0];
+        var checkItems = new List<IDeliverable>();
+
+        CollectionAssert.AreEqual(itemsAsList, checkItems);
 
         var storedContents = new VendingMachineStoredContents();
         foreach (var coinRack in vm.CoinRacks)
@@ -331,11 +361,20 @@ public class UnitTest1
         expected.PopCansInPopCanRacks.Add(expectedWater);
         expected.PopCansInPopCanRacks.Add(expectedStuff);
 
+        List<Coin> expectedPCISB = new List<Coin>();
 
-        Assert.ReferenceEquals(expected, storedContents);
+        CollectionAssert.AreEqual(expectedFive, storedContents.CoinsInCoinRacks[0]);
+        CollectionAssert.AreEqual(expectedTen, storedContents.CoinsInCoinRacks[1]);
+        CollectionAssert.AreEqual(expected25, storedContents.CoinsInCoinRacks[2]);
+        CollectionAssert.AreEqual(expected100, storedContents.CoinsInCoinRacks[3]);
 
-
+        CollectionAssert.AreEqual(expectedCoke, storedContents.PopCansInPopCanRacks[0]);
+        CollectionAssert.AreEqual(expectedWater, storedContents.PopCansInPopCanRacks[1]);
+        CollectionAssert.AreEqual(expectedStuff, storedContents.PopCansInPopCanRacks[2]);
+        CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
     }
+
+
 
     [TestMethod]
     public void GoodTestMethod8()
