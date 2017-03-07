@@ -780,11 +780,11 @@ public class UnitTest1
         vm.CoinSlot.AddCoin(hundred);
         vm.CoinSlot.AddCoin(hundred);
 
-        var items2 = vm.DeliveryChute.RemoveItems();
-        var itemsAsList2 = new List<IDeliverable>(items2);
-        var checkItems2 = new List<IDeliverable>();
+        items = vm.DeliveryChute.RemoveItems();
+        itemsAsList = new List<IDeliverable>(items);
+        checkItems = new List<IDeliverable>();
 
-        CollectionAssert.AreEqual(itemsAsList2, checkItems2);
+        CollectionAssert.AreEqual(itemsAsList, checkItems);
 
         var storedContents = new VendingMachineStoredContents();
         foreach (var coinRack in vm.CoinRacks)
@@ -840,48 +840,224 @@ public class UnitTest1
         CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
         //CONTINUE FROM LINE 20
 
-        List<Coin> fiveCoins2 = new List<Coin>();
-        fiveCoins2.Add(five);
+        fiveCoins.Clear();
+        fiveCoins.Add(five);
 
-        List<Coin> tenCoins2 = new List<Coin>();
-        tenCoins2.Add(ten);
+        tenCoins.Clear();
+        tenCoins.Add(ten);
 
-        List<Coin> twentyFiveCoins2 = new List<Coin>();
-        twentyFiveCoins2.Add(twentyFive);
-        twentyFiveCoins2.Add(twentyFive);
+        twentyFiveCoins.Clear();
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
 
-        List<Coin> hundredCoins2 = new List<Coin>();
+        hundredCoins.Clear();
 
-        var coinrack2 = vm.CoinRacks;
-        coinrack2[0].LoadCoins(hundredCoins);
-        coinrack2[1].LoadCoins(fiveCoins);
-        coinrack2[2].LoadCoins(twentyFiveCoins);
-        coinrack2[3].LoadCoins(tenCoins);
+        coinrack = vm.CoinRacks;
+        coinrack[0].LoadCoins(hundredCoins);
+        coinrack[1].LoadCoins(fiveCoins);
+        coinrack[2].LoadCoins(twentyFiveCoins);
+        coinrack[3].LoadCoins(tenCoins);
 
-        List<PopCan> cokes2 = new List<PopCan>();
-        cokes2.Add(coke);
+        cokes.Clear();
+        cokes.Add(coke);
 
-        List<PopCan> waters2 = new List<PopCan>();
-        waters2.Add(water);
+        waters.Clear();
+        waters.Add(water);
 
-        List<PopCan> stuffs2 = new List<PopCan>();
-        stuffs2.Add(stuff);
+        stuffs.Clear();
+        stuffs.Add(stuff);
 
-        var popCanRack2 = vm.PopCanRacks;
-        popCanRack2[0].LoadPops(cokes);
-        popCanRack2[1].LoadPops(waters);
-        popCanRack2[2].LoadPops(stuffs);
+        popCanRack = vm.PopCanRacks;
+        popCanRack[0].LoadPops(cokes);
+        popCanRack[1].LoadPops(waters);
+        popCanRack[2].LoadPops(stuffs);
 
         vm.SelectionButtons[0].Press();
 
-        var items3 = vm.DeliveryChute.RemoveItems();
-        var itemsAsList3 = new List<IDeliverable>(items3);
-        var checkItems3 = new List<IDeliverable>();
-        checkItems3.Add(coke);
-        checkItems3.Add(twentyFive);
-        checkItems3.Add(twentyFive);
+        items = vm.DeliveryChute.RemoveItems();
+        itemsAsList = new List<IDeliverable>(items);
+        checkItems = new List<IDeliverable>();
+        checkItems.Add(coke);
+        checkItems.Add(twentyFive);
+        checkItems.Add(twentyFive);
 
-        CollectionAssert.AreEqual(itemsAsList3, checkItems3);
+        CollectionAssert.AreEqual(itemsAsList, checkItems);
         //CONTINUE FROM LINE 30
+        storedContents = new VendingMachineStoredContents();
+        foreach (var coinRack in vm.CoinRacks)
+        {
+            storedContents.CoinsInCoinRacks.Add(coinRack.Unload());
+        }
+
+        extra = vm.StorageBin.Unload();
+        foreach (Coin i in extra)
+        {
+            storedContents.PaymentCoinsInStorageBin.Add(i);
+        }
+
+        foreach (var popCanRacks in vm.PopCanRacks)
+        {
+            storedContents.PopCansInPopCanRacks.Add(popCanRacks.Unload());
+        }
+
+        expected = new VendingMachineStoredContents();
+
+        expectedFive.Clear();
+        expectedFive.Add(five);
+
+        expectedTen.Clear();
+        expectedTen.Add(ten);
+
+        expected25.Clear();
+
+        expected100.Clear();
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+
+        expectedStuff.Clear();
+        expectedStuff.Add(stuff);
+
+        expectedCoke.Clear();
+
+        expectedWater.Clear();
+        expectedWater.Add(water);
+
+        expectedPCISB.Clear();
+
+        CollectionAssert.AreEqual(expectedFive, storedContents.CoinsInCoinRacks[1]);
+        CollectionAssert.AreEqual(expectedTen, storedContents.CoinsInCoinRacks[3]);
+        CollectionAssert.AreEqual(expected25, storedContents.CoinsInCoinRacks[2]);
+        CollectionAssert.AreEqual(expected100, storedContents.CoinsInCoinRacks[0]);
+
+        CollectionAssert.AreEqual(expectedCoke, storedContents.PopCansInPopCanRacks[0]);
+        CollectionAssert.AreEqual(expectedWater, storedContents.PopCansInPopCanRacks[1]);
+        CollectionAssert.AreEqual(expectedStuff, storedContents.PopCansInPopCanRacks[2]);
+
+        CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
+        //Create the new VM
+        VendingMachine vm1 = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic vml1 = new VendingMachineLogic(vm);
+
+        List<string> popNames1 = new List<string>();
+        popNames1.Add("Coke");
+        popNames1.Add("water");
+        popNames1.Add("stuff");
+
+        List<int> popCosts1 = new List<int>();
+        popCosts1.Add(250);
+        popCosts1.Add(250);
+        popCosts1.Add(205);
+
+        vm1.Configure(popNames1, popCosts1);
+
+        List<string> popNames1Change = new List<string>();
+        popNames1Change.Add("A");
+        popNames1Change.Add("B");
+        popNames1Change.Add("C");
+
+        List<int> popCosts1Change = new List<int>();
+
+        popCosts1Change.Add(5);
+        popCosts1Change.Add(10);
+        popCosts1Change.Add(25);
+
+        vm1.Configure(popNames1Change, popCosts1Change);
+
+        var storedContents1 = new VendingMachineStoredContents();
+        foreach (var coinRack1 in vm1.CoinRacks)
+        {
+            storedContents1.CoinsInCoinRacks.Add(coinRack1.Unload());
+        }
+
+        List<Coin> extra1 = vm1.StorageBin.Unload();
+
+        foreach (Coin i in extra1)
+        {
+            storedContents1.PaymentCoinsInStorageBin.Add(i);
+        }
+
+        foreach (var popCanRacks1 in vm1.PopCanRacks)
+        {
+            storedContents1.PopCansInPopCanRacks.Add(popCanRacks1.Unload());
+        }
+
+        VendingMachineStoredContents expected1 = new VendingMachineStoredContents();
+
+        List<Coin> expectedFive1 = new List<Coin>();
+
+        List<Coin> expectedTen1 = new List<Coin>();
+
+        List<Coin> expected251 = new List<Coin>();
+
+        List<Coin> expected1001 = new List<Coin>();
+
+        List<PopCan> expectedStuff1 = new List<PopCan>();
+
+        List<PopCan> expectedCoke1 = new List<PopCan>();
+
+        List<PopCan> expectedWater1 = new List<PopCan>();
+
+        List<Coin> expectedPCISB1 = new List<Coin>();
+
+        CollectionAssert.AreEqual(expectedFive1, storedContents1.CoinsInCoinRacks[1]);
+        CollectionAssert.AreEqual(expectedTen1, storedContents1.CoinsInCoinRacks[3]);
+        CollectionAssert.AreEqual(expected251, storedContents1.CoinsInCoinRacks[2]);
+        CollectionAssert.AreEqual(expected1001, storedContents1.CoinsInCoinRacks[0]);
+
+        CollectionAssert.AreEqual(expectedCoke1, storedContents1.PopCansInPopCanRacks[0]);
+        CollectionAssert.AreEqual(expectedWater1, storedContents1.PopCansInPopCanRacks[1]);
+        CollectionAssert.AreEqual(expectedStuff1, storedContents1.PopCansInPopCanRacks[2]);
+
+        CollectionAssert.AreEqual(expectedPCISB1, storedContents1.PaymentCoinsInStorageBin);
+
+        List<Coin> fiveCoins1 = new List<Coin>();
+        fiveCoins1.Add(five);
+
+        List<Coin> tenCoins1 = new List<Coin>();
+        tenCoins1.Add(ten);
+
+        List<Coin> twentyFiveCoins1 = new List<Coin>();
+        twentyFiveCoins1.Add(twentyFive);
+        twentyFiveCoins1.Add(twentyFive);
+
+        List<Coin> hundredCoins1 = new List<Coin>();
+
+        var coinrack1 = vm1.CoinRacks;
+        coinrack1[0].LoadCoins(hundredCoins1);
+        coinrack1[1].LoadCoins(fiveCoins1);
+        coinrack1[2].LoadCoins(twentyFiveCoins1);
+        coinrack1[3].LoadCoins(tenCoins1);
+
+        PopCan popa = new PopCan("A");
+        PopCan popb = new PopCan("B");
+        PopCan popc = new PopCan("C");
+
+        List<PopCan> apop = new List<PopCan>();
+        apop.Add(popa);
+
+        List<PopCan> bpop = new List<PopCan>();
+        bpop.Add(popb);
+
+        List<PopCan> cpop = new List<PopCan>();
+        cpop.Add(popc);
+
+        var popCanRack1 = vm1.PopCanRacks;
+        popCanRack1[0].LoadPops(apop);
+        popCanRack1[1].LoadPops(bpop);
+        popCanRack1[2].LoadPops(cpop);
+
+        vm1.CoinSlot.AddCoin(ten);
+        vm1.CoinSlot.AddCoin(five);
+        vm1.CoinSlot.AddCoin(ten);
+
+        vm1.SelectionButtons[2].Press();
+
+        var items1 = vm1.DeliveryChute.RemoveItems();
+        var itemsAsList1 = new List<IDeliverable>(items1);
+        var checkItems1 = new List<IDeliverable>();
+
+        CollectionAssert.AreEqual(itemsAsList1, checkItems1);
+
     }
 }
