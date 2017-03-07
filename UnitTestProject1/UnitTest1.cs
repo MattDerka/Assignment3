@@ -1615,4 +1615,70 @@ public class UnitTest1
         CollectionAssert.AreEqual(itemsAsList3, checkItems3);
         //CONTINUE FROM LINE 30
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(Exception))]
+    public void BadTestMethod5()
+    {
+        int[] coins = {0};
+
+        int selectionButtonCount = 1;
+        int coinRackCapacity = 10;
+        int popRackCapacity = 10;
+        int receptacleCapacity = 10;
+
+        VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic l = new VendingMachineLogic(vm);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(IndexOutOfRangeException))]
+    public void BadTestMethod6()
+    {
+        int[] coins = {5, 10, 25, 100 };
+
+        int selectionButtonCount = 3;
+        int coinRackCapacity = 5;
+        int popRackCapacity = 5;
+        int receptacleCapacity = 5;
+
+        VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic l = new VendingMachineLogic(vm);
+
+        vm.SelectionButtons[3].Press();
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(IndexOutOfRangeException))]
+    public void BadTestMethod7()
+    {
+        int[] coins = { 5, 10, 25, 100 };
+
+        int selectionButtonCount = 3;
+        int coinRackCapacity = 5;
+        int popRackCapacity = 5;
+        int receptacleCapacity = 5;
+
+        VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic l = new VendingMachineLogic(vm);
+
+        vm.SelectionButtons[-1].Press();
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(IndexOutOfRangeException))]
+    public void BadTestMethod8()
+    {
+        int[] coins = { 5, 10, 25, 100 };
+
+        int selectionButtonCount = 3;
+        int coinRackCapacity = 5;
+        int popRackCapacity = 5;
+        int receptacleCapacity = 5;
+
+        VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic l = new VendingMachineLogic(vm);
+
+        vm.SelectionButtons[4].Press();
+    }
 }
