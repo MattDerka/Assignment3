@@ -7,9 +7,11 @@ using Frontend2.Hardware;
 [TestClass]
 public class UnitTest1
 {
-    [TestMethod]    // Test T01
+    [TestMethod]   
     public void GoodTestMethod1()
     {
+        //T01
+        //Testing good insert and press exact change
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 3;
@@ -154,9 +156,11 @@ public class UnitTest1
 
     }
 
-    [TestMethod]    // test T02
+    [TestMethod]   
     public void GoodTestMethod2()
     {
+        //T02
+        //Testing good insert and press change expected
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 3;
@@ -301,6 +305,8 @@ public class UnitTest1
     [TestMethod]
     public void GoodTestMethod3()
     {
+        //T03
+        //Testing good teardown without configure or load
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 3;
@@ -376,6 +382,8 @@ public class UnitTest1
     [TestMethod]
     public void GoodTestMethod4()
     {
+        //T04
+        //Testing good press without insert
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 3;
@@ -510,6 +518,8 @@ public class UnitTest1
     [TestMethod]
     public void GoodTestMethod5()
     {
+        //T05
+        //Testing good scrambled coin kinds
         int[] coins = { 100, 5, 25, 10 };
 
         int selectionButtonCount = 3;
@@ -666,6 +676,8 @@ public class UnitTest1
     [TestMethod]
     public void GoodTestMethod6()
     {
+        //T06
+        //Testing good extract before sale
         int[] coins = { 100, 5, 25, 10};
 
         int selectionButtonCount = 3;
@@ -809,6 +821,8 @@ public class UnitTest1
     [TestMethod]
     public void GoodTestMethod7()
     {
+        //T07
+        //Testing good changing configuration
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 3;
@@ -1071,6 +1085,8 @@ public class UnitTest1
     [TestMethod]
     public void GoodTestMethod8()
     {
+        //T08
+        //Testing good approximate change
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 1;
@@ -1193,6 +1209,8 @@ public class UnitTest1
     [TestMethod]
     public void GoodTestMethod9()
     {
+        //T09
+        //Testing good hard for change
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 1;
@@ -1313,6 +1331,8 @@ public class UnitTest1
     [TestMethod]
     public void GoodTestMethod10()
     {
+        //T10
+        //Testing good invalid coin
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 1;
@@ -1433,9 +1453,12 @@ public class UnitTest1
         CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
 
     }
+    //GOTTA FIX THIS
     [TestMethod]
     public void GoodTestMethod11()
     {
+        //T11
+        //Testing good extract before sale complex
         int[] coins = { 100, 5, 25, 10 };
 
         int selectionButtonCount = 3;
@@ -1791,11 +1814,567 @@ public class UnitTest1
         CollectionAssert.AreEqual(itemsAsList1, checkItems1);
 
     }
+    [TestMethod]
+    public void GoodTestMethod12()
+    {
+        //T12
+        //Testing good approximate change with credit
+        int[] coins = { 5, 10, 25, 100 };
 
+        int selectionButtonCount = 1;
+        int coinRackCapacity = 10;
+        int popRackCapacity = 10;
+        int receptacleCapacity = 10;
+
+        VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic vml = new VendingMachineLogic(vm);
+
+        List<string> popNames = new List<string>();
+        popNames.Add("stuff");
+
+        List<int> popCosts = new List<int>();
+        popCosts.Add(140);
+
+        vm.Configure(popNames, popCosts);
+
+        Coin five = new Coin(5);
+        Coin ten = new Coin(10);
+        Coin twentyFive = new Coin(25);
+        Coin hundred = new Coin(100);
+
+        List<Coin> fiveCoins = new List<Coin>();
+
+        List<Coin> tenCoins = new List<Coin>();
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+
+        List<Coin> twentyFiveCoins = new List<Coin>();
+        twentyFiveCoins.Add(twentyFive);
+
+        List<Coin> hundredCoins = new List<Coin>();
+        hundredCoins.Add(hundred);
+
+        var coinrack = vm.CoinRacks;
+        coinrack[0].LoadCoins(fiveCoins);
+        coinrack[1].LoadCoins(tenCoins);
+        coinrack[2].LoadCoins(twentyFiveCoins);
+        coinrack[3].LoadCoins(hundredCoins);
+
+        PopCan stuff = new PopCan("stuff");
+
+        List<PopCan> stuffs = new List<PopCan>();
+        stuffs.Add(stuff);
+
+        var popCanRack = vm.PopCanRacks;
+        popCanRack[0].LoadPops(stuffs);
+
+        vm.CoinSlot.AddCoin(hundred);
+        vm.CoinSlot.AddCoin(hundred);
+        vm.CoinSlot.AddCoin(hundred);
+
+        vm.SelectionButtons[0].Press();
+
+        var items = vm.DeliveryChute.RemoveItems();
+        var itemsAsList = new List<IDeliverable>(items);
+
+        var checkItems = new List<IDeliverable>();
+        checkItems.Add(stuff);
+        checkItems.Add(hundred);
+        checkItems.Add(twentyFive);
+        checkItems.Add(ten);
+        checkItems.Add(ten);
+        checkItems.Add(ten);
+
+        CollectionAssert.AreEqual(itemsAsList, checkItems);
+
+        var storedContents = new VendingMachineStoredContents();
+        foreach (var coinRack in vm.CoinRacks)
+        {
+            storedContents.CoinsInCoinRacks.Add(coinRack.Unload());
+        }
+
+        List<Coin> extra = vm.StorageBin.Unload();
+        foreach (Coin i in extra)
+        {
+            storedContents.PaymentCoinsInStorageBin.Add(i);
+        }
+
+        foreach (var popCanRacks in vm.PopCanRacks)
+        {
+            storedContents.PopCansInPopCanRacks.Add(popCanRacks.Unload());
+        }
+
+        List<Coin> expectedFive = new List<Coin>();
+
+        List<Coin> expectedTen = new List<Coin>();
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+
+        List<Coin> expected25 = new List<Coin>();
+
+        List<Coin> expected100 = new List<Coin>();
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+
+        List<PopCan> expectedStuff = new List<PopCan>();
+
+        List<Coin> expectedPCISB = new List<Coin>();
+
+        CollectionAssert.AreEqual(expectedFive, storedContents.CoinsInCoinRacks[0]);
+        CollectionAssert.AreEqual(expectedTen, storedContents.CoinsInCoinRacks[1]);
+        CollectionAssert.AreEqual(expected25, storedContents.CoinsInCoinRacks[2]);
+        CollectionAssert.AreEqual(expected100, storedContents.CoinsInCoinRacks[3]);
+
+        CollectionAssert.AreEqual(expectedStuff, storedContents.PopCansInPopCanRacks[0]);
+        CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
+
+        fiveCoins.Clear();
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+
+        tenCoins.Clear();
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+
+        twentyFiveCoins.Clear();
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+
+        hundredCoins.Clear();
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+
+        coinrack = vm.CoinRacks;
+        coinrack[0].LoadCoins(fiveCoins);
+        coinrack[1].LoadCoins(tenCoins);
+        coinrack[2].LoadCoins(twentyFiveCoins);
+        coinrack[3].LoadCoins(hundredCoins);
+
+        stuffs.Clear();
+        stuffs.Add(stuff);
+
+        popCanRack = vm.PopCanRacks;
+        popCanRack[0].LoadPops(stuffs);
+
+        vm.CoinSlot.AddCoin(twentyFive);
+        vm.CoinSlot.AddCoin(hundred);
+        vm.CoinSlot.AddCoin(ten);
+
+        vm.SelectionButtons[0].Press();
+
+        items = vm.DeliveryChute.RemoveItems();
+        itemsAsList = new List<IDeliverable>(items);
+
+        checkItems = new List<IDeliverable>();
+        checkItems.Add(stuff);
+
+        CollectionAssert.AreEqual(itemsAsList, checkItems);
+
+        storedContents = new VendingMachineStoredContents();
+        foreach (var coinRack in vm.CoinRacks)
+        {
+            storedContents.CoinsInCoinRacks.Add(coinRack.Unload());
+        }
+
+        extra = vm.StorageBin.Unload();
+        foreach (Coin i in extra)
+        {
+            storedContents.PaymentCoinsInStorageBin.Add(i);
+        }
+
+        foreach (var popCanRacks in vm.PopCanRacks)
+        {
+            storedContents.PopCansInPopCanRacks.Add(popCanRacks.Unload());
+        }
+
+        expectedFive.Clear();
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+
+        expectedTen.Clear();
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+
+        expected25.Clear();
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+
+        expected100.Clear();
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+
+        expectedStuff.Clear();
+
+        expectedPCISB.Clear();
+        expectedPCISB.Add(twentyFive);
+        expectedPCISB.Add(hundred);
+        expectedPCISB.Add(ten);
+
+        CollectionAssert.AreEqual(expectedFive, storedContents.CoinsInCoinRacks[0]);
+        CollectionAssert.AreEqual(expectedTen, storedContents.CoinsInCoinRacks[1]);
+        CollectionAssert.AreEqual(expected25, storedContents.CoinsInCoinRacks[2]);
+        CollectionAssert.AreEqual(expected100, storedContents.CoinsInCoinRacks[3]);
+
+        CollectionAssert.AreEqual(expectedStuff, storedContents.PopCansInPopCanRacks[0]);
+        CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
+    }
+    [TestMethod]
+    public void GoodTestMethod13()
+    {
+        //T13
+        //Testing good need to store payment
+        int[] coins = { 5, 10, 25, 100 };
+
+        int selectionButtonCount = 1;
+        int coinRackCapacity = 10;
+        int popRackCapacity = 10;
+        int receptacleCapacity = 10;
+
+        VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic vml = new VendingMachineLogic(vm);
+
+        List<string> popNames = new List<string>();
+        popNames.Add("stuff");
+
+        List<int> popCosts = new List<int>();
+        popCosts.Add(135);
+
+        vm.Configure(popNames, popCosts);
+
+        Coin five = new Coin(5);
+        Coin ten = new Coin(10);
+        Coin twentyFive = new Coin(25);
+        Coin hundred = new Coin(100);
+
+        List<Coin> fiveCoins = new List<Coin>();
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+        fiveCoins.Add(five);
+
+        List<Coin> tenCoins = new List<Coin>();
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+        tenCoins.Add(ten);
+
+        List<Coin> twentyFiveCoins = new List<Coin>();
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+        twentyFiveCoins.Add(twentyFive);
+
+        List<Coin> hundredCoins = new List<Coin>();
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+        hundredCoins.Add(hundred);
+
+        var coinrack = vm.CoinRacks;
+        coinrack[0].LoadCoins(fiveCoins);
+        coinrack[1].LoadCoins(tenCoins);
+        coinrack[2].LoadCoins(twentyFiveCoins);
+        coinrack[3].LoadCoins(hundredCoins);
+
+        PopCan stuff = new PopCan("stuff");
+
+        List<PopCan> stuffs = new List<PopCan>();
+        stuffs.Add(stuff);
+
+        var popCanRack = vm.PopCanRacks;
+        popCanRack[0].LoadPops(stuffs);
+
+        vm.CoinSlot.AddCoin(twentyFive);
+        vm.CoinSlot.AddCoin(hundred);
+        vm.CoinSlot.AddCoin(ten);
+
+        vm.SelectionButtons[0].Press();
+
+        var items = vm.DeliveryChute.RemoveItems();
+        var itemsAsList = new List<IDeliverable>(items);
+
+       var checkItems = new List<IDeliverable>();
+        checkItems.Add(stuff);
+
+        CollectionAssert.AreEqual(itemsAsList, checkItems);
+
+        var storedContents = new VendingMachineStoredContents();
+        foreach (var coinRack in vm.CoinRacks)
+        {
+            storedContents.CoinsInCoinRacks.Add(coinRack.Unload());
+        }
+
+        List<Coin> extra = vm.StorageBin.Unload();
+        foreach (Coin i in extra)
+        {
+            storedContents.PaymentCoinsInStorageBin.Add(i);
+        }
+
+        foreach (var popCanRacks in vm.PopCanRacks)
+        {
+            storedContents.PopCansInPopCanRacks.Add(popCanRacks.Unload());
+        }
+
+        List<Coin> expectedFive = new List<Coin>();
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+        expectedFive.Add(five);
+
+        List<Coin> expectedTen = new List<Coin>();
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+        expectedTen.Add(ten);
+
+        List<Coin> expected25 = new List<Coin>();
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+        expected25.Add(twentyFive);
+
+        List<Coin> expected100 = new List<Coin>();
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+        expected100.Add(hundred);
+
+        List<PopCan> expectedStuff = new List<PopCan>();
+
+        List<Coin> expectedPCISB = new List<Coin>();
+        expectedPCISB.Add(twentyFive);
+        expectedPCISB.Add(hundred);
+        expectedPCISB.Add(ten);
+
+        CollectionAssert.AreEqual(expectedFive, storedContents.CoinsInCoinRacks[0]);
+        CollectionAssert.AreEqual(expectedTen, storedContents.CoinsInCoinRacks[1]);
+        CollectionAssert.AreEqual(expected25, storedContents.CoinsInCoinRacks[2]);
+        CollectionAssert.AreEqual(expected100, storedContents.CoinsInCoinRacks[3]);
+
+        CollectionAssert.AreEqual(expectedStuff, storedContents.PopCansInPopCanRacks[0]);
+        CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
+
+
+    }
     [TestMethod]
     [ExpectedException(typeof(Exception))]
+    public void BadTestMethod1()
+    {
+        //U01
+        //Testing bad configure before construct
+        VendingMachine vm = new VendingMachine(null, 0, 0, 0, 0);
+        VendingMachineLogic l = new VendingMachineLogic(vm);
+
+
+        List<string> popNames = new List<string>();
+        popNames.Add("Coke");
+        popNames.Add("water");
+        popNames.Add("stuff");
+
+        List<int> popCosts = new List<int>();
+        popCosts.Add(250);
+        popCosts.Add(250);
+        popCosts.Add(205);
+
+        vm.Configure(popNames, popCosts);
+
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(Exception), "Pop can costs cannot be less than 1")]
+    public void BadTestMethod2()
+    {
+        //U02
+        //Testing bad costs list
+        int[] coins = { 5, 10, 25, 100 };
+
+        int selectionButtonCount = 3;
+        int coinRackCapacity = 10;
+        int popRackCapacity = 10;
+        int receptacleCapacity = 10;
+
+        VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic vml = new VendingMachineLogic(vm);
+
+        List<string> popNames = new List<string>();
+        popNames.Add("Coke");
+        popNames.Add("water");
+        popNames.Add("stuff");
+
+        List<int> popCosts = new List<int>();
+        popCosts.Add(250);
+        popCosts.Add(250);
+        popCosts.Add(0);
+
+        vm.Configure(popNames, popCosts);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(Exception), "The number of names and costs must be identical to the number of pop can racks in the machine")]
+    public void BadTestMethod3()
+    {
+        //U03
+        //Testing bad names list
+        int[] coins = { 5, 10, 25, 100 };
+
+        int selectionButtonCount = 3;
+        int coinRackCapacity = 10;
+        int popRackCapacity = 10;
+        int receptacleCapacity = 10;
+
+        VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic vml = new VendingMachineLogic(vm);
+
+        List<string> popNames = new List<string>();
+        popNames.Add("Coke");
+        popNames.Add("water");
+
+        List<int> popCosts = new List<int>();
+        popCosts.Add(250);
+        popCosts.Add(250);
+
+        vm.Configure(popNames, popCosts);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(Exception), "Coin kinds must have unique values")]
+    public void BadTestMethod4()
+    {
+        //U04
+        //Testing bad non-unique denomination
+        int[] coins = { 1, 1 };
+
+        int selectionButtonCount = 1;
+        int coinRackCapacity = 10;
+        int popRackCapacity = 10;
+        int receptacleCapacity = 10;
+
+        VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
+        VendingMachineLogic vml = new VendingMachineLogic(vm);
+
+    }
+    [TestMethod]
+    [ExpectedException(typeof(Exception), "Coin kind must have a positive value")]
     public void BadTestMethod5()
     {
+        //U05
+        //Testing bad coin kind
         int[] coins = {0};
 
         int selectionButtonCount = 1;
@@ -1806,11 +2385,13 @@ public class UnitTest1
         VendingMachine vm = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
         VendingMachineLogic l = new VendingMachineLogic(vm);
     }
-
+   
     [TestMethod]
-    [ExpectedException(typeof(IndexOutOfRangeException))]
+    [ExpectedException(typeof(IndexOutOfRangeException), "Index was outside the bounds of the array")]
     public void BadTestMethod6()
     {
+        //U06
+        //Testing bad button number
         int[] coins = {5, 10, 25, 100 };
 
         int selectionButtonCount = 3;
@@ -1825,9 +2406,11 @@ public class UnitTest1
     }
 
     [TestMethod]
-    [ExpectedException(typeof(IndexOutOfRangeException))]
+    [ExpectedException(typeof(IndexOutOfRangeException), "Index was outside the bounds of the array")]
     public void BadTestMethod7()
     {
+        //U07
+        //Testing bad button number 2
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 3;
@@ -1842,9 +2425,11 @@ public class UnitTest1
     }
 
     [TestMethod]
-    [ExpectedException(typeof(IndexOutOfRangeException))]
+    [ExpectedException(typeof(IndexOutOfRangeException), "Index was outside the bounds of the array")]
     public void BadTestMethod8()
     {
+        //U08
+        //Testing bad button number 3
         int[] coins = { 5, 10, 25, 100 };
 
         int selectionButtonCount = 3;
