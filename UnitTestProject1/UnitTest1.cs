@@ -1691,7 +1691,7 @@ public class UnitTest1
         CollectionAssert.AreEqual(expectedPCISB, storedContents.PaymentCoinsInStorageBin);
         //Create the new VM
         VendingMachine vm1 = new VendingMachine(coins, selectionButtonCount, coinRackCapacity, popRackCapacity, receptacleCapacity);
-        VendingMachineLogic vml1 = new VendingMachineLogic(vm);
+        VendingMachineLogic vml1 = new VendingMachineLogic(vm1);
 
         List<string> popNames1 = new List<string>();
         popNames1.Add("Coke");
@@ -1810,6 +1810,8 @@ public class UnitTest1
         var items1 = vm1.DeliveryChute.RemoveItems();
         var itemsAsList1 = new List<IDeliverable>(items1);
         var checkItems1 = new List<IDeliverable>();
+        checkItems1.Add(popc);
+
 
         CollectionAssert.AreEqual(itemsAsList1, checkItems1);
 
